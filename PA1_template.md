@@ -100,14 +100,14 @@ Average steps per interval across all days is generated with the following equat
 avg_steps <- ddply(data, .(interval), summarize, average_steps=round(mean(steps, na.rm=TRUE)),2)
 ```
 
-The time series plot is generated as follows.
+The time series plot is generated as follows and includes changing the interval to a datetime format. 
 
 ```r
 par(bg="white")
-plot(avg_steps$interval, avg_steps$average_steps, 
+plot(strptime(sprintf("%04d", as.numeric(as.character(avg_steps$interval))), "%H%M"), avg_steps$average_steps, 
      type="l",
-     xlab="Interval",
-     ylab="Average number of Steps per Interval ")
+     xlab="Time Interval",
+     ylab="Average number of Steps per Interval")
 ```
 
 ![plot of chunk plotavgsteps](figures/plotavgsteps.png) 
@@ -196,23 +196,27 @@ merge_data$Weekday <- as.factor(merge_data$Weekday)
 ```
 
 
-* Make a panel plot containing a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis).
+* Make a panel plot containing a time series plot (i.e. type = "l") of the 5-minute interval (x-axis)  and the average number of steps taken, averaged across all weekday days or weekend days (y-axis).
 
-Average number of steps   per interval and Weekday were calculated and plotted vs  intervals. 
+Average number of steps   per `time` interval in POSIXlt format, and Weekday were calculated and plotted vs  interval. X-axis had to be adjusted to accomodate the desired date format. 
+
 
 ```r
-avg_steps_new <- ddply(merge_data, .(interval, Weekday), summarize, average_steps_new=round(mean(steps),2))
+avg_steps_new       <- ddply(merge_data, .(interval, Weekday), summarize, average_steps_new=round(mean(steps),2))
+avg_steps_new$time  <- strptime(sprintf("%04d", as.numeric(as.character(avg_steps_new$interval))), "%H%M")
 
 library(ggplot2)
-ggplot(avg_steps_new, aes(interval, average_steps_new))+
+library(scales)
+ggplot(avg_steps_new, aes(time, average_steps_new))+
     geom_line()+
     facet_grid(Weekday~.)+
-    xlab("Interval")+
+    xlab("Time Interval")+
     ylab("Average Number of Steps per Interval") +
     theme_bw()+
     theme(
         axis.title.x=element_text(vjust=-0.1),
-        axis.title.y=element_text(vjust=1.5))
+        axis.title.y=element_text(vjust=1.5))+
+    scale_x_datetime(breaks=date_breaks("4 hour"), labels=date_format("%H:%M"))
 ```
 
 ![plot of chunk plotavgstepsnew](figures/plotavgstepsnew.png) 
