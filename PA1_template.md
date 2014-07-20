@@ -53,12 +53,12 @@ For this part of the assignment, you can ignore the missing values in the datase
 * Make a histogram of the total number of steps taken each day
 
 
-The `plyr` package was used to generate the total number of steps taken each day stored under the variable `total_steps
-`:
+The `plyr` package was used to generate the total number of steps taken each day stored under the variable `total_steps`. Missing values were ignored.
+
 
 ```r
 library(plyr)
-steps_total <- ddply(data, .(date), summarize, total_steps = sum(steps, na.rm=TRUE))
+steps_total <- ddply(data, .(date), summarize, total_steps = sum(steps))
 ```
 
 The base plotting system was used to present the distribution of total steps per day. Because the same data representaion will be used later on, a function called `histogram` was written and called for the variable `total$steps`:
@@ -80,13 +80,13 @@ histogram(x=steps_total$total_steps)
 
 ![plot of chunk plottotalsteps](figures/plottotalsteps.png) 
 
-* Calculate and report the mean and median total number of steps taken per day
+* Calculate and report the mean and median total number of steps taken per day.
 
 ```r
 mean_steps_total    <- round(mean(steps_total$total_steps, na.rm=TRUE),2)
 median_steps_total  <- median(steps_total$total_steps, na.rm=TRUE)
 ```
-The mean and median values of `total_steps` per day are 9354.23 and 10395, respectively.
+The mean and median values of `total_steps` per day are 10766.19 and 10765, respectively.
 
 ## What is the average daily activity pattern?
 
@@ -177,11 +177,11 @@ histogram(steps_total_new$total_steps_new)
 Mean and median of dataframe with imputed values were re-generated.
 
 ```r
-mean_steps_total_new    <- round(mean(steps_total_new$total_steps_new, na.rm=TRUE),2)
-median_steps_total_new  <- median(steps_total_new$total_steps_new, na.rm=TRUE)
+mean_steps_total_new    <- round(mean(steps_total_new$total_steps_new),2)
+median_steps_total_new  <- median(steps_total_new$total_steps_new)
 ```
 
-Imputing values leads to an increase in the mean total steps from 9354.23 to 10765.64 and to an increase in the median from 10395 to 10762.
+Imputing values leads to an slight decrease in the mean total steps from 10766.19 to 10765.64 and to a small decrease in the median from 10765 to 10762.
 
 ## Are there differences in activity patterns between weekdays and weekends?
 * Create a new factor variable in the dataset with two levels - "weekday" and "weekend" indicating whether a given date is a weekday or weekend day.
@@ -198,7 +198,7 @@ merge_data$Weekday <- as.factor(merge_data$Weekday)
 
 * Make a panel plot containing a time series plot (i.e. type = "l") of the 5-minute interval (x-axis)  and the average number of steps taken, averaged across all weekday days or weekend days (y-axis).
 
-Average number of steps   per `time` interval in POSIXlt format, and Weekday were calculated and plotted vs  interval. X-axis had to be adjusted to accomodate the desired date format. 
+Average number of steps   per `time` interval in POSIXlt format, and Weekday were calculated and plotted vs  interval. X-axis had to be adjusted to accomodate the desired date format.
 
 
 ```r
