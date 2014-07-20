@@ -61,7 +61,7 @@ library(plyr)
 steps_total <- ddply(data, .(date), summarize, total_steps = sum(steps, na.rm=TRUE))
 ```
 
-The base plotting system was used to present the distribution of total steps per day. Because the same data represenation will be used later on, a function called `histogram` was written and called for the variable `total$steps`, once for the .png file and once for embedding in the html document:
+The base plotting system was used to present the distribution of total steps per day. Because the same data representaion will be used later on, a function called `histogram` was written and called for the variable `total$steps`:
 
 
 
@@ -74,10 +74,7 @@ histogram <- function(x){
          main="Total Number of Steps per Day",
          breaks=20)
 }
-    
-png("steps_total.png")
-histogram(x=steps_total$total_steps)
-dev.off()
+
 histogram(x=steps_total$total_steps)
 ```
 
@@ -103,22 +100,14 @@ Average steps per interval across all days is generated with the following equat
 avg_steps <- ddply(data, .(interval), summarize, average_steps=round(mean(steps, na.rm=TRUE)),2)
 ```
 
-The time series plot is saved as a .png file and embedded in the html document.
+The time series plot is generated as follows.
 
 ```r
-png("avg_steps.png")
 par(bg="white")
 plot(avg_steps$interval, avg_steps$average_steps, 
      type="l",
      xlab="Interval",
      ylab="Average number of Steps per Interval ")
-dev.off()
-
-par(bg="white")
-plot(avg_steps$interval, avg_steps$average_steps, 
-     type="l",
-     xlab="Interval",
-     ylab="Average number of Steps per Interval")
 ```
 
 ![plot of chunk plotavgsteps](figures/plotavgsteps.png) 
@@ -175,14 +164,15 @@ Total steps per day using imputed values were calculated as follows and presente
 
 ```r
 steps_total_new <- ddply(merge_data, .(date) , summarize, total_steps_new=sum(steps))
+```
 
-png("steps_total_new.png")
-histogram(steps_total_new$total_steps_new)
-dev.off()
+
+```r
 histogram(steps_total_new$total_steps_new)
 ```
 
 ![plot of chunk plottotalstepsnew](figures/plottotalstepsnew.png) 
+
 
 Mean and median of dataframe with imputed values were re-generated.
 
@@ -208,24 +198,12 @@ merge_data$Weekday <- as.factor(merge_data$Weekday)
 
 2. Make a panel plot containing a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis).
 
-Average number of steps   per interval and Weekday were calculated and plotted vs the intervals. 
+Average number of steps   per interval and Weekday were calculated and plotted vs  intervals. 
 
 ```r
 avg_steps_new <- ddply(merge_data, .(interval, Weekday), summarize, average_steps_new=round(mean(steps),2))
 
-png("avg_steps_weekday.png")
 library(ggplot2)
-ggplot(avg_steps_new, aes(interval, average_steps_new))+
-    geom_line()+
-    facet_grid(Weekday~.)+
-    xlab("Interval")+
-    ylab("Average Number of Steps per Interval") +
-    theme_bw()+
-    theme(
-        axis.title.x=element_text(vjust=-0.1),
-        axis.title.y=element_text(vjust=1.5))
-
-dev.off()
 ggplot(avg_steps_new, aes(interval, average_steps_new))+
     geom_line()+
     facet_grid(Weekday~.)+
