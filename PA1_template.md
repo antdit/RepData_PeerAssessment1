@@ -142,7 +142,7 @@ The total number of missing values (i.e. `NA`) is 2304.
 
 * Devise a strategy for filling in all of the missing values in the dataset. The strategy does not need to be sophisticated. For example, you could use the mean/median for that day, or the mean for that 5-minute interval, etc.
 
-The mean of the corresponding interval was used to fill in for `NA` values. To do this, the original data frame stored in `data` is merged with the summarized data `avg_steps` by the variable `interval`. Through indexing, the variable `steps` where `is.na` is `TRUE` is replaced by the variable `avg_steps` corresponding to the respective `interval`.
+The mean of the corresponding interval across all days was used to fill in for `NA` values. While this may not be a viable option for an actual research assignment where imputing values would skew a more in-depth analysis of individual data points, it appears to be a reasonable choice in this case where the only variables dealt with are median and mean. Also, based on available data, it does not appear that the missing data would be vastly different if it had been available as it would have have been of the same data type collected at the same intervals as all other data of the corresponding intervals. To achieve imputation, the original data frame stored in `data` is merged with the summarized data `avg_steps` by the variable `interval`. Through indexing, the variable `steps` where `is.na` is `TRUE` is replaced by the variable `avg_steps` corresponding to the respective `interval`.
 
 
 ```r
@@ -221,3 +221,4 @@ ggplot(avg_steps_new, aes(time, average_steps_new))+
 
 ![plot of chunk plotavgstepsnew](figures/plotavgstepsnew.png) 
 
+There are differences in weekend and weekday activities especially in amplitudes of peak activities (e.g. 8-10 a.m. interval) and the more consistent activity pattern (in terms of amplitude) on weekends across most intervals. Also, weekday activities tend to start earlier and also decrease earlier in the evening compared to weekend activities.
